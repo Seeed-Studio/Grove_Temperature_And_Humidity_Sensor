@@ -5,6 +5,7 @@ written by Adafruit Industries
 */
 
 #include "DHT.h"
+#define NAN 0
 
 DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
   _pin = pin;
@@ -107,7 +108,7 @@ boolean DHT::read(void) {
   pinMode(_pin, OUTPUT);
   digitalWrite(_pin, LOW);
   delay(20);
-  cli();
+  //cli();
   digitalWrite(_pin, HIGH);
   delayMicroseconds(40);
   pinMode(_pin, INPUT);
@@ -137,7 +138,7 @@ boolean DHT::read(void) {
 
   }
 
-  sei();
+  //sei();
   
   /*
   Serial.println(j, DEC);
