@@ -6,17 +6,14 @@
  #include "WProgram.h"
 #endif
 
-// WioLTE STM32F405 compatibility
-#define STM32F405
-
-
 // 8 MHz(ish) AVR ---------------------------------------------------------
 #if (F_CPU >= 7400000UL) && (F_CPU <= 9500000UL)
 #define COUNT 3
 // 16 MHz(ish) AVR --------------------------------------------------------
 #elif (F_CPU >= 15400000UL) && (F_CPU <= 19000000L)
 #define COUNT 6
-#elif defined(STM32F405)
+// 180MHz STM32F405 STM32F407
+#elif defined(F_CPU == 168000000L)
 #define COUNT 40
 #else
 #error "CPU SPEED NOT SUPPORTED"
