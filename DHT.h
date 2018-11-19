@@ -13,7 +13,7 @@
 #elif (F_CPU >= 15400000UL) && (F_CPU <= 19000000L)
 #define COUNT 6
 // 168MHz STM32F405 STM32F407
-#elif defined(F_CPU == 168000000L)
+#elif (F_CPU == 168000000L)
 #define COUNT 40
 #else
 #error "CPU SPEED NOT SUPPORTED"
