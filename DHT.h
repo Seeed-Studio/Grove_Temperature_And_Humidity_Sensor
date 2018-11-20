@@ -12,8 +12,11 @@
 // 16 MHz(ish) AVR --------------------------------------------------------
 #elif (F_CPU >= 15400000UL) && (F_CPU <= 19000000L)
 #define COUNT 6
+// 48MHz SAMD21J18A (Sodaq Explorer)
+#elif (F_CPU == 48000000UL)
+#define COUNT 18
 // 168MHz STM32F405 STM32F407
-#elif defined(F_CPU == 168000000L)
+#elif (F_CPU == 168000000L)
 #define COUNT 40
 #else
 #error "CPU SPEED NOT SUPPORTED"
