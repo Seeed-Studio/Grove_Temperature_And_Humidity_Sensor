@@ -19,8 +19,13 @@ DHT dht(DHTPIN, DHTTYPE);
 
 void setup() 
 {
+
     Serial.begin(9600); 
     Serial.println("DHTxx test!");
+
+    /*if using WIO link,must pull up the power pin.*/
+    // pinMode(PIN_GROVE_POWER, OUTPUT);
+    // digitalWrite(PIN_GROVE_POWER, 1);
 
     dht.begin();
 }

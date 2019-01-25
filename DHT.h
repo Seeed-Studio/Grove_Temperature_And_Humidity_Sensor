@@ -19,7 +19,9 @@
 #elif (F_CPU == 168000000L)
 #define COUNT 40
 #elif (F_CPU == 80000000L)
-#define COUNT 25
+#define COUNT 22
+#elif (F_CPU == 160000000L)
+#define COUNT 36
 #else
 #error "CPU SPEED NOT SUPPORTED"
 #endif
