@@ -38,7 +38,7 @@ void loop()
     float t = dht.readTemperature();
 
     // check if returns are valid, if they are NaN (not a number) then something went wrong!
-    if (isnan(t) || isnan(h)) 
+    if (isnan(t) && isnan(h)) 
     {
         Serial.println("Failed to read from DHT");
     } 
