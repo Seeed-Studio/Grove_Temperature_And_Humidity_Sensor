@@ -7,7 +7,11 @@ written by Adafruit Industries
 #include <math.h>
 #include "DHT.h"
 //#define NAN 0
-
+#ifdef DEBUG
+#define DEBUG_PRINT(...)  Serial.println(__VA_ARGS__)
+#else
+#define DEBUG_PRINT(...)
+#endif
 DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
   _pin = pin;
   _type = type;
@@ -48,7 +52,7 @@ float DHT::readTemperature(bool S) {
       return f;
     }
   }
-  Serial.print("Read fail");
+  DEBUG_PRINT("Read fail");
   return NAN;
 }
 
@@ -72,7 +76,7 @@ float DHT::readHumidity(void) {
       return f;
     }
   }
-  Serial.print("Read fail");
+  DEBUG_PRINT("Read fail");
   return NAN;
 }
 
@@ -98,8 +102,8 @@ boolean DHT::read(void) {
   }
   firstreading = false;
   /*
-    Serial.print("Currtime: "); Serial.print(currenttime);
-    Serial.print(" Lasttime: "); Serial.print(_lastreadtime);
+    DEBUG_PRINT("Currtime: "); DEBUG_PRINT(currenttime);
+    DEBUG_PRINT(" Lasttime: "); DEBUG_PRINT(_lastreadtime);
   */
   _lastreadtime = millis();
 
@@ -142,13 +146,13 @@ boolean DHT::read(void) {
   //sei();
   
   /*
-  Serial.println(j, DEC);
-  Serial.print(data[0], HEX); Serial.print(", ");
-  Serial.print(data[1], HEX); Serial.print(", ");
-  Serial.print(data[2], HEX); Serial.print(", ");
-  Serial.print(data[3], HEX); Serial.print(", ");
-  Serial.print(data[4], HEX); Serial.print(" =? ");
-  Serial.println(data[0] + data[1] + data[2] + data[3], HEX);
+  DEBUG_PRINTln(j, DEC);
+  DEBUG_PRINT(data[0], HEX); DEBUG_PRINT(", ");
+  DEBUG_PRINT(data[1], HEX); DEBUG_PRINT(", ");
+  DEBUG_PRINT(data[2], HEX); DEBUG_PRINT(", ");
+  DEBUG_PRINT(data[3], HEX); DEBUG_PRINT(", ");
+  DEBUG_PRINT(data[4], HEX); DEBUG_PRINT(" =? ");
+  DEBUG_PRINTln(data[0] + data[1] + data[2] + data[3], HEX);
   */
 
   // check we read 40 bits and that the checksum matches
