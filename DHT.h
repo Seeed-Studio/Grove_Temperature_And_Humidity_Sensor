@@ -6,6 +6,8 @@
  #include "WProgram.h"
 #endif
 
+#include <Wire.h>
+
 // 8 MHz(ish) AVR ---------------------------------------------------------
 #if (F_CPU >= 7400000UL) && (F_CPU <= 9500000UL)
 #define COUNT 3
@@ -35,10 +37,25 @@ written by Adafruit Industries
 // how many timing transitions we need to keep track of. 2 * number bits + extra
 #define MAXTIMINGS 85
 
+#ifdef ARDUINO_SAMD_VARIANT_COMPLIANCE
+  #define SERIAL SerialUSB
+#else
+  #define SERIAL Serial
+#endif
+
+
+
+#define DEFAULT_IIC_ADDR    0x38
+#define RESET_REG_ADDR      0xba
+#define  HUMIDITY_INDEX     0
+#define  TEMPRATURE_INDEX   1
+
 #define DHT11 11
 #define DHT22 22
 #define DHT21 21
 #define AM2301 21
+
+#define DHT10 10
 
 class DHT {
  private:
@@ -54,6 +71,21 @@ class DHT {
   float readTemperature(bool S=false);
   float convertCtoF(float);
   float readHumidity(void);
+
+  int readTempAndHumidity(float *data);
+
+// DHT10 digital interfaces(i2c),onlu for DHT10 .
+  int i2cReadByte(uint8_t& byte);
+  int i2cReadBytes(uint8_t *bytes,uint32_t len);
+  int i2cWriteBytes(uint8_t *bytes,uint32_t len);
+  int i2cWriteByte(uint8_t byte);
+
+  int DHT10Reset(void);
+  int DHT10ReadStatus(void);
+  int setSystemCfg(void);
+  int readTargetData(uint32_t *data);
+  int DHT10Init(void);
+
 
 };
 #endif

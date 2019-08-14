@@ -19,11 +19,60 @@ DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
   firstreading = true;
 }
 
+
+
 void DHT::begin(void) {
-  // set up the pins!
-  pinMode(_pin, INPUT);
-  digitalWrite(_pin, HIGH);
-  _lastreadtime = 0;
+
+  if(_type == DHT10){
+    if(DHT10Init()){
+        SERIAL.println("Error : Failed to init DHT 11\n");
+		    while(1);
+    }
+  }
+  else{
+    // set up the pins!
+    pinMode(_pin, INPUT);
+    digitalWrite(_pin, HIGH);
+    _lastreadtime = 0;
+  }
+
+}
+
+
+int DHT::readTempAndHumidity(float *data)
+{
+    uint32_t target_val[2] = {0};
+    uint32_t cnt;
+    if(_type == DHT10){
+      while(DHT10ReadStatus()==0)
+      {
+        DHT10Init();
+        delay(30);
+        cnt++;
+        if(cnt > 3)
+          return -1;
+      }
+        //wait for data ready。
+        while(readTargetData(target_val)){
+          cnt++;
+          delay(50);
+          if(cnt > 5){
+            return -1;
+          }
+
+        }
+        data[0] = target_val[0] *100.0/1024/1024;
+        data[1] = target_val[1] *200.0/1024/1024-50;
+
+    }
+    else{
+        data[0] = readHumidity();
+        data[1] = readTemperature();
+        if (isnan(data[0]) || isnan(data[1])){
+            return -1;
+        }
+    }
+    return 0;
 }
 
 //boolean S == Scale.  True == Farenheit; False == Celcius
@@ -165,3 +214,196 @@ boolean DHT::read(void) {
   return false;
 
 }
+
+/*****************************************************************************/
+/*****************************************************************************/
+
+
+int DHT::DHT10Reset(void)
+{
+  if(_type == DHT10)
+	    return i2cWriteByte(RESET_REG_ADDR);
+  else{
+      return 0;
+      SERIAL.println("This function only support for DHT10");
+  } 
+
+}
+
+int DHT::DHT10ReadStatus(void)
+{
+
+	int ret = 0;
+	uint8_t statu = 0;
+  if(_type == DHT10){
+        ret = i2cReadByte(statu);
+	    if(ret)
+		    SERIAL.println("Failed to read byte\n");
+	    if((statu & 0x8)==0x8)  
+  		  return 1;
+  	  else  
+	  	  return 0;
+  }
+  else{
+      return 0;
+      SERIAL.println("This function only support for DHT10");
+  }
+    
+}
+
+int DHT::setSystemCfg(void)
+{
+	uint8_t cfg_param[] = {0xe1,0x08,0x00};
+  if(_type == DHT10)
+	    return i2cWriteBytes(cfg_param,sizeof(cfg_param));
+  else {
+    SERIAL.println("This function only support for DHT10");
+    return 0;
+  }
+}
+
+
+int DHT::readTargetData(uint32_t *data)
+{
+	uint8_t statu = 0;
+	uint8_t bytes[6] = {0};
+	uint8_t cfg_params[] ={0xac,0x33,0x00};
+	int ret = 0;
+
+  if(_type == DHT10){
+
+    if( i2cWriteBytes(cfg_params,sizeof(cfg_params)) ){
+      return -1;
+    }
+
+    delay(75);
+    while(statu & 0x80 == 0x80){
+      SERIAL.println("Device busy!");
+      delay(200);
+      if(i2cReadByte(statu)){
+        return -1;
+      }	
+    }
+
+    if(i2cReadBytes(bytes,sizeof(bytes))){
+      return -1;
+    }
+    
+
+    data[HUMIDITY_INDEX] = (data[HUMIDITY_INDEX] | bytes[1]) << 8;
+    data[HUMIDITY_INDEX] = (data[HUMIDITY_INDEX] | bytes[2]) << 8;
+    data[HUMIDITY_INDEX] = (data[HUMIDITY_INDEX] | bytes[3]);
+    data[HUMIDITY_INDEX] = data[HUMIDITY_INDEX] >>4;
+
+    data[TEMPRATURE_INDEX] = (data[TEMPRATURE_INDEX] | bytes[3]) << 8;
+    data[TEMPRATURE_INDEX] = (data[TEMPRATURE_INDEX] | bytes[4]) << 8;
+    data[TEMPRATURE_INDEX] = (data[TEMPRATURE_INDEX] | bytes[5]);
+    data[TEMPRATURE_INDEX] &= 0xfffff;
+
+    return 0;
+  }
+  else {
+    SERIAL.println("This function only support for DHT10");
+    return 0;
+  }
+}
+
+
+int DHT::DHT10Init(void)
+{
+	int ret = 0;
+	int cnt = 0;
+
+  if(_type == DHT10){
+
+      delay(500);
+      DHT10Reset();
+      delay(300);
+      
+      ret = setSystemCfg();
+      if(ret){
+        SERIAL.println("Failed to set system conf reg \n");
+      }
+      //SERIAL.println("Set system cfg OK!");
+
+      delay(500);
+      
+      while(DHT10ReadStatus()==0)
+      {
+        SERIAL.println("get status error!");
+        DHT10Reset();
+        delay(500);
+        if(setSystemCfg()){
+          SERIAL.println("Failed to set system conf reg \n");
+        }
+        delay(500);
+        cnt++;
+        if(cnt>5)
+          return -1;
+      }
+      return 0;
+  }
+  else{
+      SERIAL.println("This function only support for DHT10");
+      return 0;
+  }
+  
+}
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+
+int DHT::i2cReadByte(uint8_t& byte)
+{
+	int cnt = 0;
+	Wire.requestFrom(DEFAULT_IIC_ADDR,1);
+	while(1 != Wire.available()){
+		cnt++;
+		if(cnt >= 10 )
+			return -1;
+		delay(1);
+	}
+
+	byte = Wire.read();
+	return 0;
+}
+
+int DHT::i2cReadBytes(uint8_t *bytes,uint32_t len)
+{
+	int cnt = 0;
+	Wire.requestFrom(DEFAULT_IIC_ADDR,len);
+	while(len != Wire.available()){
+		cnt++;
+		if(cnt >= 10 )
+			return -1;
+		delay(1);
+	}
+	for(int i=0;i<len;i++){
+		bytes[i] = Wire.read();
+	}
+	return 0;
+}
+
+
+int DHT::i2cWriteBytes(uint8_t *bytes,uint32_t len)
+{
+	Wire.beginTransmission(DEFAULT_IIC_ADDR);
+	for(int i=0;i< len;i++)
+	{
+		Wire.write(bytes[i]);
+	}
+	return Wire.endTransmission();
+}
+
+int DHT::i2cWriteByte(uint8_t byte)
+{
+	Wire.beginTransmission(DEFAULT_IIC_ADDR);
+	Wire.write(byte);
+	return Wire.endTransmission();
+}
+
+
+
+
