@@ -5,6 +5,7 @@
 
 #######################################
 # Datatypes (KEYWORD1)
+DHT	KEYWORD1
 #######################################
 
 
@@ -17,6 +18,13 @@ begin	KEYWORD2
 readTemperature	KEYWORD2
 convertCtoF	KEYWORD2
 readHumidity	KEYWORD2
+
+readTempAndHumidity	KEYWORD2
+DHT10Reset	KEYWORD2
+DHT10ReadStatus	KEYWORD2
+setSystemCfg	KEYWORD2
+readTargetData	KEYWORD2
+DHT10Init	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

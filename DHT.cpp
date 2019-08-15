@@ -38,7 +38,10 @@ void DHT::begin(void) {
 
 }
 
-
+/**Common  interface to get temp&humi value.support all DHT device.
+ * 
+ * @return 0 for calibrated failed,1 for succeed.
+ **/
 int DHT::readTempAndHumidity(float *data)
 {
     uint32_t target_val[2] = {0};
@@ -218,7 +221,9 @@ boolean DHT::read(void) {
 /*****************************************************************************/
 /*****************************************************************************/
 
-
+/**Reset sensor.
+ * @return 0 for calibrated failed,1 for succeed.
+ **/
 int DHT::DHT10Reset(void)
 {
   if(_type == DHT10)
@@ -230,6 +235,11 @@ int DHT::DHT10Reset(void)
 
 }
 
+/** Read status register.check the calibration flag - bit[3]: 1- calibrated ok ,0 - Not calibrated.
+ * 
+ * @return 0 for calibrated failed,1 for succeed. 
+ * 
+ **/
 int DHT::DHT10ReadStatus(void)
 {
 
@@ -245,12 +255,15 @@ int DHT::DHT10ReadStatus(void)
 	  	  return 0;
   }
   else{
-      return 0;
-      SERIAL.println("This function only support for DHT10");
+        SERIAL.println("This function only support for DHT10");
+        return 0;
   }
     
 }
 
+/** Init sensor,send 0x08,0x00 to register 0xe1.
+ *  @ return : 0 if success, non-zero if failed.
+ **/
 int DHT::setSystemCfg(void)
 {
 	uint8_t cfg_param[] = {0xe1,0x08,0x00};
@@ -263,6 +276,10 @@ int DHT::setSystemCfg(void)
 }
 
 
+/** Read temp & humi result buf from sensor.
+ *  total 6 bytes,the first byte for status register,other 5 bytes for temp & humidity data.
+ *  @ return : 0 if success, non-zero if failed.
+ **/
 int DHT::readTargetData(uint32_t *data)
 {
 	uint8_t statu = 0;
@@ -277,6 +294,7 @@ int DHT::readTargetData(uint32_t *data)
     }
 
     delay(75);
+    // check device busy flag， bit[7]:1 for busy, 0 for idle.
     while(statu & 0x80 == 0x80){
       SERIAL.println("Device busy!");
       delay(200);
@@ -308,7 +326,10 @@ int DHT::readTargetData(uint32_t *data)
   }
 }
 
-
+/**DHT10 Init function.
+ * Reset sensor and wait for calibration complete.
+ * @ return : 0 if success, non-zero if failed.
+ **/ 
 int DHT::DHT10Init(void)
 {
 	int ret = 0;

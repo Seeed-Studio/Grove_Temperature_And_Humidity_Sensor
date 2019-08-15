@@ -10,7 +10,7 @@
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
 
-/*Notice: The DHT10 is different from other DHT* sensor ,it use i2c interface rather than one wire*/
+/*Notice: The DHT10 is different from other DHT* sensor ,it uses i2c interface rather than one wire*/
           /*So it doesn't require a pin.*/
 
 //#define DHTTYPE DHT10

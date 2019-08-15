@@ -15,6 +15,10 @@ This temperature & humidity sensor provides a pre-calibrated digital output. A u
 
 For more information please visit [wiki DHT11](http://wiki.seeedstudio.com/Grove-TemperatureAndHumidity_Sensor/) and [wiki AM2302](http://wiki.seeedstudio.com/Grove-Temperature_and_Humidity_Sensor_Pro/)
 
+****
+
+Add support for DHT10 , The different from other DHT* device is that it uses i2c interface.  
+
 ----
 
 This demo is licensed under [The MIT License](http://opensource.org/licenses/mit-license.php). Check LINCESE for more information.<br>

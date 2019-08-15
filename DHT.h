@@ -72,6 +72,10 @@ class DHT {
   float convertCtoF(float);
   float readHumidity(void);
 
+  /**Common  interface to get temp&humi value.support all DHT device.
+   * 
+   * @return 0 for calibrated failed,1 for succeed.
+   **/
   int readTempAndHumidity(float *data);
 
 // DHT10 digital interfaces(i2c),onlu for DHT10 .
@@ -80,10 +84,33 @@ class DHT {
   int i2cWriteBytes(uint8_t *bytes,uint32_t len);
   int i2cWriteByte(uint8_t byte);
 
+
+  /**Reset sensor.
+   * @return 0 for calibrated failed,1 for succeed.
+   **/
   int DHT10Reset(void);
+
+  /** Read status register.check the calibration flag - bit[3]: 1- calibrated ok ,0 - Not calibrated.
+   * 
+   * @return 0 for calibrated failed,1 for succeed. 
+   * 
+   **/
   int DHT10ReadStatus(void);
+  /** Init sensor,send 0x08,0x00 to register 0xe1.
+   *  @ return : 0 if success, non-zero if failed.
+   **/
   int setSystemCfg(void);
+
+  /** Read temp & humi result buf from sensor.
+   *  total 6 bytes,the first byte for status register,other 5 bytes for temp & humidity data.
+   *  @ return : 0 if success, non-zero if failed.
+   **/
   int readTargetData(uint32_t *data);
+  
+  /**DHT10 Init function.
+   * Reset sensor and wait for calibration complete.
+   * @ return : 0 if success, non-zero if failed.
+   **/ 
   int DHT10Init(void);
 
 
