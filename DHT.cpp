@@ -25,7 +25,7 @@ void DHT::begin(void) {
 
   if(_type == DHT10){
     if(DHT10Init()){
-        SERIAL.println("Error : Failed to init DHT 11\n");
+        SERIALPRINT.println("Error : Failed to init DHT 11\n");
 		    while(1);
     }
   }
@@ -230,7 +230,7 @@ int DHT::DHT10Reset(void)
 	    return i2cWriteByte(RESET_REG_ADDR);
   else{
       return 0;
-      SERIAL.println("This function only support for DHT10");
+      SERIALPRINT.println("This function only support for DHT10");
   } 
 
 }
@@ -248,14 +248,14 @@ int DHT::DHT10ReadStatus(void)
   if(_type == DHT10){
         ret = i2cReadByte(statu);
 	    if(ret)
-		    SERIAL.println("Failed to read byte\n");
+		    SERIALPRINT.println("Failed to read byte\n");
 	    if((statu & 0x8)==0x8)  
   		  return 1;
   	  else  
 	  	  return 0;
   }
   else{
-        SERIAL.println("This function only support for DHT10");
+        SERIALPRINT.println("This function only support for DHT10");
         return 0;
   }
     
@@ -270,7 +270,7 @@ int DHT::setSystemCfg(void)
   if(_type == DHT10)
 	    return i2cWriteBytes(cfg_param,sizeof(cfg_param));
   else {
-    SERIAL.println("This function only support for DHT10");
+    SERIALPRINT.println("This function only support for DHT10");
     return 0;
   }
 }
@@ -296,7 +296,7 @@ int DHT::readTargetData(uint32_t *data)
     delay(75);
     // check device busy flag， bit[7]:1 for busy, 0 for idle.
     while(statu & 0x80 == 0x80){
-      SERIAL.println("Device busy!");
+      SERIALPRINT.println("Device busy!");
       delay(200);
       if(i2cReadByte(statu)){
         return -1;
@@ -321,7 +321,7 @@ int DHT::readTargetData(uint32_t *data)
     return 0;
   }
   else {
-    SERIAL.println("This function only support for DHT10");
+    SERIALPRINT.println("This function only support for DHT10");
     return 0;
   }
 }
@@ -343,19 +343,19 @@ int DHT::DHT10Init(void)
       
       ret = setSystemCfg();
       if(ret){
-        SERIAL.println("Failed to set system conf reg \n");
+        SERIALPRINT.println("Failed to set system conf reg \n");
       }
-      //SERIAL.println("Set system cfg OK!");
+      //SERIALPRINT.println("Set system cfg OK!");
 
       delay(500);
       
       while(DHT10ReadStatus()==0)
       {
-        SERIAL.println("get status error!");
+        SERIALPRINT.println("get status error!");
         DHT10Reset();
         delay(500);
         if(setSystemCfg()){
-          SERIAL.println("Failed to set system conf reg \n");
+          SERIALPRINT.println("Failed to set system conf reg \n");
         }
         delay(500);
         cnt++;
@@ -365,7 +365,7 @@ int DHT::DHT10Init(void)
       return 0;
   }
   else{
-      SERIAL.println("This function only support for DHT10");
+      SERIALPRINT.println("This function only support for DHT10");
       return 0;
   }
   

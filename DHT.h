@@ -38,9 +38,9 @@ written by Adafruit Industries
 #define MAXTIMINGS 85
 
 #ifdef ARDUINO_SAMD_VARIANT_COMPLIANCE
-  #define SERIAL SerialUSB
+  #define SERIALPRINT SerialUSB
 #else
-  #define SERIAL Serial
+  #define SERIALPRINT Serial
 #endif
 
 
