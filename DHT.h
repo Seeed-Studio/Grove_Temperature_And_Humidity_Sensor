@@ -5,7 +5,6 @@
 #else
  #include "WProgram.h"
 #endif
-
 #include <Wire.h>
 
 // 8 MHz(ish) AVR ---------------------------------------------------------
@@ -25,7 +24,8 @@
 #elif (F_CPU == 160000000L)
 #define COUNT 36
 #else
-#error "CPU SPEED NOT SUPPORTED"
+#define COUNT 25
+//#error "CPU SPEED NOT SUPPORTED"
 #endif
 
 /* DHT library
@@ -36,14 +36,7 @@ written by Adafruit Industries
 
 // how many timing transitions we need to keep track of. 2 * number bits + extra
 #define MAXTIMINGS 85
-
-#ifdef ARDUINO_SAMD_VARIANT_COMPLIANCE
-  #define SERIALPRINT SerialUSB
-#else
-  #define SERIALPRINT Serial
-#endif
-
-
+#define SERIALPRINT Serial
 
 #define DEFAULT_IIC_ADDR    0x38
 #define RESET_REG_ADDR      0xba
