@@ -23,12 +23,12 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 #if defined(ARDUINO_ARCH_AVR)
-#define debug  Serial
+#define SERIAL  Serial
 
 #elif defined(ARDUINO_ARCH_SAMD) ||  defined(ARDUINO_ARCH_SAM)
-#define debug  SerialUSB
+#define SERIAL  SerialUSB
 #else
-#define debug  Serial
+#define SERIAL  Serial
 #endif
 
 void setup() 
