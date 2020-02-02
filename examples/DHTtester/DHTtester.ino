@@ -6,12 +6,12 @@
 #define DHTPIN 2     // what pin we're connected to
 
 // Uncomment whatever type you're using!
-//#define DHTTYPE DHT11   // DHT 11 
+//#define DHTTYPE DHT11   // DHT 11
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
 
 /*Notice: The DHT10 is different from other DHT* sensor ,it uses i2c interface rather than one wire*/
-          /*So it doesn't require a pin.*/
+/*So it doesn't require a pin.*/
 
 //#define DHTTYPE DHT10
 
@@ -23,18 +23,17 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 #if defined(ARDUINO_ARCH_AVR)
-#define SERIAL  Serial
+    #define debug  Serial
 
 #elif defined(ARDUINO_ARCH_SAMD) ||  defined(ARDUINO_ARCH_SAM)
-#define SERIAL  SerialUSB
+    #define debug  SerialUSB
 #else
-#define SERIAL  Serial
+    #define debug  Serial
 #endif
 
-void setup() 
-{
+void setup() {
 
-    SERIAL.begin(115200); 
+    SERIAL.begin(115200);
     SERIAL.println("DHTxx test!");
     Wire.begin();
 
@@ -45,24 +44,22 @@ void setup()
     dht.begin();
 }
 
-void loop() 
-{
+void loop() {
     float temp_hum_val[2] = {0};
     // Reading temperature or humidity takes about 250 milliseconds!
     // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-    
-    
-    if(!dht.readTempAndHumidity(temp_hum_val)){
-        SERIAL.print("Humidity: "); 
+
+
+    if (!dht.readTempAndHumidity(temp_hum_val)) {
+        SERIAL.print("Humidity: ");
         SERIAL.print(temp_hum_val[0]);
         SERIAL.print(" %\t");
-        SERIAL.print("Temperature: "); 
+        SERIAL.print("Temperature: ");
         SERIAL.print(temp_hum_val[1]);
         SERIAL.println(" *C");
-    }
-    else{
-       SERIAL.println("Failed to get temprature and humidity value.");
+    } else {
+        SERIAL.println("Failed to get temprature and humidity value.");
     }
 
-   delay(1500);
+    delay(1500);
 }
