@@ -1,4 +1,4 @@
-Grove_Temperature_And_Humidity_Sensor
+Grove_Temperature_And_Humidity_Sensor  [![Build Status](https://travis-ci.com/Seeed-Studio/Grove_Temperature_And_Humidity_Sensor.svg?branch=master)](https://travis-ci.com/Seeed-Studio/Grove_Temperature_And_Humidity_Sensor)
 =====================================
 
 This is an Arduino library for the DHT series of low cost temperature/humidity sensors.
