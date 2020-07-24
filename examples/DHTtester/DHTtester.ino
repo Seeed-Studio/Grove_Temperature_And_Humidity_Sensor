@@ -33,8 +33,8 @@ DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
 
-    SERIAL.begin(115200);
-    SERIAL.println("DHTxx test!");
+    debug.begin(115200);
+    debug.println("DHTxx test!");
     Wire.begin();
 
     /*if using WIO link,must pull up the power pin.*/
@@ -51,14 +51,14 @@ void loop() {
 
 
     if (!dht.readTempAndHumidity(temp_hum_val)) {
-        SERIAL.print("Humidity: ");
-        SERIAL.print(temp_hum_val[0]);
-        SERIAL.print(" %\t");
-        SERIAL.print("Temperature: ");
-        SERIAL.print(temp_hum_val[1]);
-        SERIAL.println(" *C");
+        debug.print("Humidity: ");
+        debug.print(temp_hum_val[0]);
+        debug.print(" %\t");
+        debug.print("Temperature: ");
+        debug.print(temp_hum_val[1]);
+        debug.println(" *C");
     } else {
-        SERIAL.println("Failed to get temprature and humidity value.");
+        debug.println("Failed to get temprature and humidity value.");
     }
 
     delay(1500);
