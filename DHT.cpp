@@ -83,6 +83,16 @@ float DHT::readTemperature(bool S) {
         switch (_type) {
             case DHT11:
                 f = data[2];
+                if(data[3]%128<10){
+                    f += data[3]%128/10.0f;
+                }else if(data[3]%128<100){
+                    f += data[3]%128/100.0f;
+                }else{
+                    f += data[3]%128/1000.0f;
+                }
+                if(data[3]>=128){ // The left-most digit indicate the negative sign. 
+                    f = -f;
+                }
                 if (S) {
                     f = convertCtoF(f);
                 }
