@@ -49,6 +49,7 @@
 #define AM2301 21
 
 #define DHT10 10
+#define DHT20 10
 
 class DHT {
   private:

@@ -77,43 +77,52 @@ int DHT::readTempAndHumidity(float* data) {
 
 //boolean S == Scale.  True == Farenheit; False == Celcius
 float DHT::readTemperature(bool S) {
-    float f;
+    if(_type == DHT10){
+		float temp[2];
+		readTempAndHumidity(temp);
+		if (S) {
+			temp[1] = convertCtoF(temp[1]);
+		}
+		return temp[1];
+	}
+	else{
+		float f;
+		if (read()) {
+			switch (_type) {
+				case DHT11:
+					f = data[2];
+					if(data[3]%128<10){
+						f += data[3]%128/10.0f;
+					}else if(data[3]%128<100){
+						f += data[3]%128/100.0f;
+					}else{
+						f += data[3]%128/1000.0f;
+					}
+					if(data[3]>=128){ // The left-most digit indicate the negative sign. 
+						f = -f;
+					}
+					if (S) {
+						f = convertCtoF(f);
+					}
 
-    if (read()) {
-        switch (_type) {
-            case DHT11:
-                f = data[2];
-                if(data[3]%128<10){
-                    f += data[3]%128/10.0f;
-                }else if(data[3]%128<100){
-                    f += data[3]%128/100.0f;
-                }else{
-                    f += data[3]%128/1000.0f;
-                }
-                if(data[3]>=128){ // The left-most digit indicate the negative sign. 
-                    f = -f;
-                }
-                if (S) {
-                    f = convertCtoF(f);
-                }
+					return f;
+				case DHT22:
+				case DHT21:
+					f = data[2] & 0x7F;
+					f *= 256;
+					f += data[3];
+					f /= 10;
+					if (data[2] & 0x80) {
+						f *= -1;
+					}
+					if (S) {
+						f = convertCtoF(f);
+					}
 
-                return f;
-            case DHT22:
-            case DHT21:
-                f = data[2] & 0x7F;
-                f *= 256;
-                f += data[3];
-                f /= 10;
-                if (data[2] & 0x80) {
-                    f *= -1;
-                }
-                if (S) {
-                    f = convertCtoF(f);
-                }
-
-                return f;
-        }
-    }
+					return f;
+			}
+		}
+	}
     DEBUG_PRINT("Read fail");
     return NAN;
 }
@@ -123,21 +132,28 @@ float DHT::convertCtoF(float c) {
 }
 
 float DHT::readHumidity(void) {
-    float f;
-    if (read()) {
-        switch (_type) {
-            case DHT11:
-                f = data[0];
-                return f;
-            case DHT22:
-            case DHT21:
-                f = data[0];
-                f *= 256;
-                f += data[1];
-                f /= 10;
-                return f;
-        }
-    }
+    if(_type == DHT10){
+		float temp[2];
+		readTempAndHumidity(temp);
+		return temp[0];
+	}
+	else{
+		float f;
+		if (read()) {
+			switch (_type) {
+				case DHT11:
+					f = data[0];
+					return f;
+				case DHT22:
+				case DHT21:
+					f = data[0];
+					f *= 256;
+					f += data[1];
+					f /= 10;
+					return f;
+			}
+		}
+	}
     DEBUG_PRINT("Read fail");
     return NAN;
 }
