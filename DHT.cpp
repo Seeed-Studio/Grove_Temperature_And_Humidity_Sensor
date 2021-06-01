@@ -19,7 +19,15 @@ DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
     firstreading = true;
 }
 
-
+DHT::DHT(uint8_t type) {
+    if (_type != DHT10){
+        DEBUG_PRINT("Error : No pins are defined\n");
+    }
+    _pin = 0;
+    _type = type;
+    _count = COUNT;
+    firstreading = true;
+}
 
 void DHT::begin(void) {
 

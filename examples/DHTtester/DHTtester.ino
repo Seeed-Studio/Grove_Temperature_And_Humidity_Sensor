@@ -14,6 +14,7 @@
 /*So it doesn't require a pin.*/
 
 //#define DHTTYPE DHT10
+//#define DHTTYPE DHT20
 
 // Connect pin 1 (on the left) of the sensor to +5V
 // Connect pin 2 of the sensor to whatever your DHTPIN is
@@ -21,7 +22,7 @@
 // Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
 
 DHT dht(DHTPIN, DHTTYPE);
-
+//DHT dht(DHTTYPE);    //DHT11 DHT20 don't need to define Pin
 #if defined(ARDUINO_ARCH_AVR)
     #define debug  Serial
 
