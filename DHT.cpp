@@ -51,7 +51,7 @@ void DHT::begin(void) {
  **/
 int DHT::readTempAndHumidity(float* data) {
     uint32_t target_val[2] = {0};
-    uint32_t cnt;
+    uint32_t cnt = 0;
     if (_type == DHT10) {
         while (DHT10ReadStatus() == 0) {
             DHT10Init();
@@ -319,7 +319,7 @@ int DHT::readTargetData(uint32_t* data) {
     uint8_t statu = 0;
     uint8_t bytes[6] = {0};
     uint8_t cfg_params[] = {0xac, 0x33, 0x00};
-    int ret = 0;
+    //int ret = 0;
 
     if (_type == DHT10) {
 
@@ -329,7 +329,7 @@ int DHT::readTargetData(uint32_t* data) {
 
         delay(75);
         // check device busy flag， bit[7]:1 for busy, 0 for idle.
-        while (statu & 0x80 == 0x80) {
+        while ((statu & 0x80) == 0x80) {
             SERIALPRINT.println("Device busy!");
             delay(200);
             if (i2cReadByte(statu)) {
