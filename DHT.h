@@ -16,6 +16,9 @@
     // 48MHz SAMD21J18A (Sodaq Explorer)
 #elif (F_CPU == 48000000UL)
     #define COUNT 18
+    // 64MHz NRF52840 
+#elif (F_CPU == 64000000UL)
+    #define COUNT 20
     // 168MHz STM32F405 STM32F407
 #elif (F_CPU == 168000000L)
     #define COUNT 40
@@ -28,6 +31,10 @@
     //#error "CPU SPEED NOT SUPPORTED"
 #endif
 
+//RP2040
+#if defined(ARDUINO_ARCH_RP2040)
+    #define COUNT 10
+#endif
 /*  DHT library
 
     MIT license
