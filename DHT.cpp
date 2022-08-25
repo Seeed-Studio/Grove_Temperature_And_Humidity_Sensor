@@ -201,7 +201,7 @@ boolean DHT::read(void) {
     delay(20);
     //cli();
     digitalWrite(_pin, HIGH);
-    delayMicroseconds(40);
+    delayMicroseconds(20);
     pinMode(_pin, INPUT);
 
     // read in timings
