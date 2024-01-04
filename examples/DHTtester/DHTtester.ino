@@ -1,7 +1,7 @@
 // Example testing sketch for various DHT humidity/temperature sensors
 // Written by ladyada, public domain
 
-#include "DHT.h"
+#include "Grove_Temperature_And_Humidity_Sensor.h"
 
 // Uncomment whatever type you're using!
 //#define DHTTYPE DHT11   // DHT 11
