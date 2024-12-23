@@ -26,7 +26,11 @@ DHT dht(DHTPIN, DHTTYPE);   //   DHT11 DHT21 DHT22
     #define debug  Serial
 
 #elif defined(ARDUINO_ARCH_SAMD) ||  defined(ARDUINO_ARCH_SAM)
+#ifdef SerialUSB
     #define debug  SerialUSB
+#else
+    #define debug  Serial
+#endif
 #else
     #define debug  Serial
 #endif

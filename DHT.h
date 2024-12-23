@@ -33,6 +33,7 @@
 
 //RP2040
 #if defined(ARDUINO_ARCH_RP2040)
+    #undef COUNT
     #define COUNT 10
 #endif
 /*  DHT library

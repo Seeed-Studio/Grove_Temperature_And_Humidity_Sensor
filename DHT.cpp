@@ -20,13 +20,13 @@ DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
 }
 
 DHT::DHT(uint8_t type) {
-    if (_type != DHT10){
-        DEBUG_PRINT("Error : No pins are defined\n");
-    }
     _pin = 0;
     _type = type;
     _count = COUNT;
     firstreading = true;
+    if (_type != DHT10){
+        DEBUG_PRINT("Error : No pins are defined\n");
+    }
 }
 
 void DHT::begin(void) {
@@ -425,14 +425,14 @@ int DHT::i2cReadByte(uint8_t& byte) {
 int DHT::i2cReadBytes(uint8_t* bytes, uint32_t len) {
     int cnt = 0;
     Wire.requestFrom(DEFAULT_IIC_ADDR, len);
-    while (len != Wire.available()) {
+    while (len != (uint32_t) Wire.available()) {
         cnt++;
         if (cnt >= 10) {
             return -1;
         }
         delay(1);
     }
-    for (int i = 0; i < len; i++) {
+    for (uint32_t i = 0; i < len; i++) {
         bytes[i] = Wire.read();
     }
     return 0;
@@ -441,7 +441,7 @@ int DHT::i2cReadBytes(uint8_t* bytes, uint32_t len) {
 
 int DHT::i2cWriteBytes(uint8_t* bytes, uint32_t len) {
     Wire.beginTransmission(DEFAULT_IIC_ADDR);
-    for (int i = 0; i < len; i++) {
+    for (uint32_t i = 0; i < len; i++) {
         Wire.write(bytes[i]);
     }
     return Wire.endTransmission();
@@ -452,7 +452,3 @@ int DHT::i2cWriteByte(uint8_t byte) {
     Wire.write(byte);
     return Wire.endTransmission();
 }
-
-
-
-
