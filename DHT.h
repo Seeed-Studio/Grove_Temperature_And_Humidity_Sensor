@@ -9,29 +9,29 @@
 
 // 8 MHz(ish) AVR ---------------------------------------------------------
 #if (F_CPU >= 7400000UL) && (F_CPU <= 9500000UL)
-    #define COUNT 1
+    #define COUNT 3
     // 16 MHz(ish) AVR --------------------------------------------------------
 #elif (F_CPU == 10000000L)
-    #define COUNT 1
+    #define COUNT 3
 #elif (F_CPU >= 15400000UL) && (F_CPU <= 19000000L)
-    #define COUNT 2
+    #define COUNT 6
 #elif (F_CPU == 20000000L)
-    #define COUNT 2
+    #define COUNT 6
 #elif (F_CPU == 40000000L)
-    #define COUNT 4
+    #define COUNT 10
     // 48MHz SAMD21J18A (Sodaq Explorer)
 #elif (F_CPU == 48000000UL)
-    #define COUNT 5
-    // 64MHz NRF52840 
+    #define COUNT 18
+    // 64MHz NRF52840
 #elif (F_CPU == 64000000UL)
-    #define COUNT 6
+    #define COUNT 20
     // 168MHz STM32F405 STM32F407
 #elif (F_CPU == 168000000L)
-    #define COUNT 16
+    #define COUNT 40
 #elif (F_CPU == 80000000L)
-    #define COUNT 8
+    #define COUNT 22
 #elif (F_CPU == 160000000L)
-    #define COUNT 16
+    #define COUNT 32
 #else
     #define COUNT 24
     //#error "CPU SPEED NOT SUPPORTED"
