@@ -45,7 +45,9 @@ void setup() {
     // pinMode(PIN_GROVE_POWER, OUTPUT);
     // digitalWrite(PIN_GROVE_POWER, 1);
 
-    dht.begin();
+    if (!dht.begin()) {
+        debug.println("DHT sensor initialization failed, continuing without it.");
+    }
 }
 
 void loop() {
