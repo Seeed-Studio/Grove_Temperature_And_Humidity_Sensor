@@ -29,12 +29,12 @@ DHT::DHT(uint8_t type) {
     }
 }
 
-void DHT::begin(void) {
+bool DHT::begin(void) {
 
     if (_type == DHT10) {
         if (DHT10Init()) {
             SERIALPRINT.println("Error : Failed to init DHT 11\n");
-            while (1);
+            return false;
         }
     } else {
         // set up the pins!
@@ -42,6 +42,8 @@ void DHT::begin(void) {
         digitalWrite(_pin, HIGH);
         _lastreadtime = 0;
     }
+
+    return true;
 
 }
 
